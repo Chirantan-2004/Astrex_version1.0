@@ -1,0 +1,10 @@
+# Recommended Python 3.11/3.12 environment for the AI stack.
+numpy>=1.26,<3
+opencv-python>=4.10
+ultralytics>=8.3
+pandas>=2.2
+scikit-learn>=1.5
+joblib>=1.4
+pyttsx3>=2.98
+# MediaPipe is optional and can be installed separately when compatible with your Python build.
+# mediapipe>=0.10

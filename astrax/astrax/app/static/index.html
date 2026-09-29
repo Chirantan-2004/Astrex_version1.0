@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#101311" />
+<title>ASTRAX | Mission Operations</title>
+<link rel="stylesheet" href="/static/mission.css" />
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ASTRAX mission console">
+      <span class="brand-mark">A<span>/</span>X</span>
+      <span class="brand-copy"><strong>ASTRAX</strong><small>CREW OPERATIONS / SIH26174</small></span>
+    </a>
+    <div class="top-status">
+      <span class="system-pulse" aria-hidden="true"></span><span id="systemText">EDGE SYSTEM</span>
+      <span class="status-tag" id="modeBadge">LOCAL AI</span>
+      <span class="status-tag" id="statusBadge">READY</span>
+      <span class="user-label" id="userName"></span>
+      <a class="text-button" id="loginLink" href="/auth/login" hidden>Sign in</a>
+      <form id="logoutForm" action="/auth/logout" method="post" hidden><button class="text-button" type="submit">Sign out</button></form>
+    </div>
+  </header>
+
+  <section id="authGate" class="auth-gate" hidden>
+    <div class="auth-gate-copy">
+      <span class="eyebrow">ASTRAX / ACCESS CONTROL</span>
+      <h1>Mission console<br>awaiting identity.</h1>
+      <p id="authMessage">Sign in with your mission identity to open crew operations.</p>
+      <a class="button button-primary" id="authAction" href="/auth/login" hidden>Authenticate with mission identity</a>
+      <span id="authSetupState" class="auth-setup-state">IDENTITY PROVIDER NOT CONFIGURED</span>
+    </div>
+    <div class="auth-gate-mark" aria-hidden="true"><span>CREW</span><i></i><span>GROUND</span></div>
+  </section>
+
+  <main id="missionConsole" hidden>
+    <section class="mission-heading">
+      <div>
+        <span class="eyebrow">BAS / EXPERIMENT SUPERVISION</span>
+        <h1>Mission operations</h1>
+      </div>
+      <div class="mission-heading-meta"><span id="experimentId">BAS-001</span><span>ON-BOARD / EDGE COMPUTE</span></div>
+    </section>
+
+    <section class="workbench">
+      <article class="sensor-column">
+        <div class="section-head"><div><span class="section-index">01</span><h2>Payload view</h2></div><span class="live-state" id="cameraMeta">SENSOR STANDBY</span></div>
+        <div class="camera" id="cameraFrame">
+          <div class="camera-grid"></div>
+          <div class="camera-placeholder"><span class="sensor-mark">◉</span><strong>NO LIVE SENSOR FEED</strong><span>Awaiting camera acquisition</span></div>
+          <div class="hud hud-top-left">CAM-01 <span>FIXED PAYLOAD VIEW</span></div>
+          <div class="hud hud-top-right" id="inferenceHud">LOCAL / READY</div>
+          <div class="hud hud-bottom-left">FPS <span id="fpsHud">—</span><i></i> FRAME <span id="framesHud">—</span></div>
+          <div class="hud hud-bottom-right">REC <span id="recHud">OFF</span></div>
+        </div>
+        <div class="candidate-row">
+          <div class="candidate-signal"><span class="signal-dot" id="candidateDot"></span><div><span class="eyebrow">LIVE CANDIDATE</span><strong id="candidateActivity">NO SIGNAL</strong></div></div>
+          <div class="candidate-meta"><span id="candidateConfidence">—</span><span id="candidateAge">FRAME AGE —</span></div>
+        </div>
+        <div class="control-row">
+          <button class="button button-primary" id="cameraStart">Acquire camera</button>
+          <button class="button" id="cameraStop">Release</button>
+          <button class="button" id="cameraRecord">Start recording</button>
+        </div>
+        <div class="sensor-foot"><span>INFERENCE <strong id="engineBadge">OPENCV FALLBACK</strong></span><span>PROCESSING <strong>ON-BOARD</strong></span><span>DECISION WINDOW <strong>1.0 S</strong></span></div>
+      </article>
+
+      <article class="protocol-column">
+        <div class="section-head"><div><span class="section-index">02</span><h2>Procedure state</h2></div><span class="state-label" id="stateOrb">READY</span></div>
+        <div class="procedure-summary">
+          <div><span class="eyebrow">CURRENT ACTION</span><div class="step-count"><strong id="stepNo">1</strong><span>/ 5</span></div></div>
+          <div class="progress-summary"><strong id="completionPct">0%</strong><span>VERIFIED</span></div>
+        </div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+        <div class="action-readout"><span class="eyebrow">EXPECTED</span><strong id="nextAction">Start the experiment</strong><div class="detected-line"><span>DETECTED</span><strong id="activity">—</strong><span id="confidence">0%</span></div></div>
+        <ol id="protocolList" class="protocol-list"></ol>
+        <div class="guidance" id="alertPanel"><span class="guidance-mark" id="alertIcon">i</span><div><span class="eyebrow" id="alertKicker">SUPERVISOR</span><strong id="alertTitle">Awaiting experiment start</strong><p id="alertText">A fresh, consistent activity signal is required before any step is verified.</p></div></div>
+        <div class="simulation-controls" id="simulationControls" hidden>
+          <span class="eyebrow">SIMULATION CONTROLS</span>
+          <div class="control-row"><button class="button button-primary" id="demoStart">Start / restart</button><button class="button" id="demoCorrect">Inject correct step</button><button class="button button-warning" id="demoWrong">Inject out-of-order</button></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="support-section" aria-labelledby="supportHeading">
+      <div class="support-header"><div><span class="section-index">03</span><h2 id="supportHeading">Crew ↔ mission support</h2></div><span class="relay-state" id="relayState">LOCAL QUEUE / NO RELAY</span></div>
+      <div class="support-grid">
+        <div class="link-map" aria-label="Crew to ground message path">
+          <div class="link-node"><span>ON-BOARD</span><strong id="crewNode">CREW STATION</strong><small>ASTRAX EDGE</small></div>
+          <div class="link-path"><span class="link-path-line"></span><span id="relayPathLabel">LOCAL OUTBOX</span><span class="link-path-line"></span></div>
+          <div class="link-node ground-node"><span>GROUND</span><strong>MISSION SUPPORT</strong><small id="groundNodeStatus">NOT CONNECTED</small></div>
+          <p class="relay-explainer" id="relayExplainer">Messages are stored on this device. A secured ground relay is not configured.</p>
+        </div>
+        <div class="comms-column">
+          <div class="comms-toolbar"><span class="eyebrow">UPLINK OUTBOX</span><span id="queueCount" aria-live="polite">0 QUEUED</span></div>
+          <div class="comms-list" id="commsList"><p class="empty-state">No crew messages in this session.</p></div>
+          <form id="uplinkForm" class="uplink-form">
+            <label class="sr-only" for="uplinkMessage">Message for mission support</label>
+            <textarea id="uplinkMessage" maxlength="2000" rows="2" placeholder="Message mission support…" required></textarea>
+            <button class="button button-primary" id="uplinkSend" type="submit">Queue uplink</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="telemetry-section">
+      <div class="section-head"><div><span class="section-index">04</span><h2>Perception diagnostics</h2></div><span class="eyebrow">EDGE / LOCAL ONLY</span></div>
+      <div class="telemetry-strip">
+        <div><span>PERSON</span><strong id="personState">—</strong></div>
+        <div><span>OBJECTS</span><strong id="objectCount">0</strong></div>
+        <div><span>INTERACTION</span><strong id="interaction">—</strong></div>
+        <div><span>LATENCY</span><strong id="latency">—</strong></div>
+        <div class="telemetry-note" id="visionNote">Waiting for camera frames. Perception status is advisory; protocol rules remain deterministic.</div>
+      </div>
+    </section>
+
+    <section class="event-section">
+      <div class="section-head"><div><span class="section-index">05</span><h2>Experiment record</h2></div><div class="event-actions"><a class="text-button" id="jsonExport" href="/api/logs/BAS-001.json">Export JSON</a><a class="text-button" id="csvExport" href="/api/logs/BAS-001.csv">Export CSV</a><button class="text-button" id="resetExperiment">Reset state</button></div></div>
+      <div class="table-wrap"><table><thead><tr><th>UTC</th><th>STEP</th><th>EXPECTED</th><th>DETECTED</th><th>CONF.</th><th>RESULT</th><th>SOURCE</th><th>GUIDANCE</th></tr></thead><tbody id="eventRows"><tr><td colspan="8" class="empty-state">No experiment events.</td></tr></tbody></table></div>
+    </section>
+  </main>
+  <footer>ASTRAX / LOCAL-FIRST CREW SUPPORT / TERRESTRIAL PROTOTYPE · NOT FLIGHT QUALIFIED</footer>
+</div>
+<script src="/static/app.js" defer></script>
+</body>
+</html>

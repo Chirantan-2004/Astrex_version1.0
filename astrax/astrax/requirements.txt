@@ -1,0 +1,21 @@
+# Core runtime — small and reliable
+fastapi>=0.115,<1
+uvicorn[standard]>=0.30,<1
+pydantic>=2.7,<3
+Authlib>=1.3,<2
+httpx>=0.27,<1
+itsdangerous>=2.2,<3
+python-dotenv>=1.0,<2
+
+# Local perception / recording / training
+numpy>=1.26,<3
+opencv-python>=4.10
+pandas>=2.2
+scikit-learn>=1.5
+joblib>=1.4
+pyttsx3>=2.98
+
+# Optional but recommended for YOLO pose inference. Install separately if the machine supports it:
+# ultralytics>=8.3
+# MediaPipe is optional; Python compatibility varies by release:
+# mediapipe>=0.10

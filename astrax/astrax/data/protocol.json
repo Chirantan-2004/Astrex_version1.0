@@ -1,0 +1,12 @@
+{
+  "experiment_id": "BAS-001",
+  "name": "BAS Sample Experiment",
+  "description": "Prototype protocol used to demonstrate the ASTRAX architecture.",
+  "steps": [
+    {"step": 1, "activity": "OPEN", "instruction": "Open the experiment container"},
+    {"step": 2, "activity": "PICK", "instruction": "Pick the experiment object"},
+    {"step": 3, "activity": "INSERT", "instruction": "Insert the object into the target"},
+    {"step": 4, "activity": "ROTATE", "instruction": "Rotate the object"},
+    {"step": 5, "activity": "CLOSE", "instruction": "Close the experiment container"}
+  ]
+}
